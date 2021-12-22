@@ -3,7 +3,6 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
-
 def get_db_connection():
     conn = sqlite3.connect('bieren.db')
     conn.row_factory = sqlite3.Row
@@ -16,6 +15,7 @@ def index():
     voorraad = conn.execute('SELECT bieren.naam AS Bier, '
                             'strftime("%Y", voorraad.bottelDatum, "unixepoch") AS Botteldatum, '
                             'strftime("%Y", voorraad.aankoopDatum, "unixepoch") AS Aankoopdatum, '
+                            'strftime("%Y", voorraad.tenMinsteHoudbaarTot, "unixepoch") AS THT, '
                             'voorraad.aantal AS Aantal '
                             'FROM bieren, voorraad '
                             'WHERE voorraad.bier = bieren.id '
