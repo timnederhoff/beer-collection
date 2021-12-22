@@ -16,7 +16,8 @@ def index():
                             'strftime("%Y", voorraad.bottelDatum, "unixepoch") AS Botteldatum, '
                             'strftime("%Y", voorraad.aankoopDatum, "unixepoch") AS Aankoopdatum, '
                             'strftime("%Y", voorraad.tenMinsteHoudbaarTot, "unixepoch") AS THT, '
-                            'voorraad.aantal AS Aantal '
+                            'voorraad.aantal AS Aantal, '
+                            'voorraad.prijsinkoop*0.01 AS Prijs '
                             'FROM bieren, voorraad '
                             'WHERE voorraad.bier = bieren.id '
                             'ORDER BY bieren.naam, voorraad.bottelDatum').fetchall()
@@ -35,3 +36,11 @@ def bieren():
 @app.template_filter()
 def dash_if_none(value):
     return value or '-'
+
+
+@app.template_filter()
+def cents_to_euros(value):
+    if value:
+        return "€ {:.2f}".format(value).replace('.', ',')
+    else:
+        return '-'

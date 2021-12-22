@@ -10,6 +10,7 @@
         <th scope="col">Aankoopdatum</th>
         <th scope="col">THT</th>
         <th scope="col">Aantal</th>
+        <th scope="col">Prijs inkoop</th>
     </tr>
     </thead>
     <tbody>
@@ -20,6 +21,7 @@
             <td>{{ bier['Aankoopdatum']|dash_if_none }}</td>
             <td>{{ bier['THT']|dash_if_none }}</td>
             <td>{{ bier['Aantal'] }}</td>
+            <td>{{ bier['Prijs']|cents_to_euros }}</td>
         </tr>
         {% endfor %}
     </tbody>
