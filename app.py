@@ -1,7 +1,10 @@
 import sqlite3
-from flask import Flask, render_template
+from flask import Flask, render_template, request, url_for, flash, redirect
+from datetime import datetime
+from werkzeug.exceptions import abort
 
 app = Flask(__name__)
+
 
 def get_db_connection():
     conn = sqlite3.connect('bieren.db')
@@ -9,13 +12,32 @@ def get_db_connection():
     return conn
 
 
+def get_library_beer(library_id):
+    conn = get_db_connection()
+    beer = conn.execute('SELECT * FROM bieren WHERE id = ?', (library_id,)).fetchone()
+    conn.close()
+    if beer is None:
+        abort(404)
+    return beer
+
+
+def get_stock_beer(stock_id):
+    conn = get_db_connection()
+    stock_beer = conn.execute('SELECT * FROM voorraad WHERE id = ?', stock_id).fetchone()
+    conn.close()
+    if stock_beer is None:
+        abort(404)
+    return stock_beer
+
+
 @app.route('/')
 def index():
     conn = get_db_connection()
-    voorraad = conn.execute('SELECT bieren.naam AS Bier, '
-                            'strftime("%Y", voorraad.bottelDatum, "unixepoch") AS Botteldatum, '
-                            'strftime("%Y", voorraad.aankoopDatum, "unixepoch") AS Aankoopdatum, '
-                            'strftime("%Y", voorraad.tenMinsteHoudbaarTot, "unixepoch") AS THT, '
+    voorraad = conn.execute('SELECT voorraad.id AS ID, '
+                            'bieren.naam AS Bier, '
+                            'voorraad.bottelDatum AS Botteldatum, '
+                            'voorraad.aankoopDatum AS Aankoopdatum, '
+                            'voorraad.tenMinsteHoudbaarTot AS THT, '
                             'voorraad.aantal AS Aantal, '
                             'voorraad.prijsinkoop*0.01 AS Prijs '
                             'FROM bieren, voorraad '
@@ -33,9 +55,33 @@ def bieren():
     return render_template('bieren.html', bieren=bieren)
 
 
+@app.route('/library-beer/<int:id>/edit', methods=('GET', 'POST'))
+def edit_library_beer(id):
+    library_beer = get_library_beer(id)
+
+    if request.method == 'POST':
+        brewery = request.form['brewery']
+        name = request.form['name']
+
+        if not (brewery or name):
+            flash('Brewery and Name are required!')
+        else:
+            conn = get_db_connection()
+            conn.execute('UPDATE bieren SET brouwerij = ?, naam = ?'
+                         ' WHERE id = ?',
+                         (brewery, name, id))
+            conn.commit()
+            conn.close()
+            return redirect(url_for('bieren'))
+
+    return render_template('edit-library-beer.html', beer=library_beer)
+
+
 @app.template_filter()
-def dash_if_none(value):
-    return value or '-'
+def epoch_to_date(value, formatstr="%Y"):
+    if isinstance(value, int):
+        return datetime.utcfromtimestamp(value).strftime(formatstr)
+    return '-'
 
 
 @app.template_filter()
@@ -44,3 +90,8 @@ def cents_to_euros(value):
         return "€ {:.2f}".format(value).replace('.', ',')
     else:
         return '-'
+
+
+@app.template_filter()
+def dash_if_none(value):
+    return value or '-'

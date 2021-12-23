@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Edit "{{ beer['naam'] }}" {% endblock %}</h1>
+
+    <form method="post">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text"
+                   name="name"
+                   placeholder="Beer name"
+                   class="form-control"
+                   value="{{ request.form['name'] or beer['naam'] }}">
+            </input>
+        </div>
+
+        <div class="form-group">
+            <label for="brewery">Brewery</label>
+            <input type="text"
+                   name="brewery"
+                   placeholder="Brewery"
+                   class="form-control"
+                   value="{{ request.form['brewery'] or beer['brouwerij'] }}">
+            </input>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+    <hr>
+{#    <form action="{{ url_for('delete', id=post['id']) }}" method="POST">#}
+{#        <input type="submit" value="Delete Post"#}
+{#               class="btn btn-danger btn-sm"#}
+{#               onclick="return confirm('Are you sure you want to delete this post?')">#}
+{#    </form>#}
+{% endblock %}

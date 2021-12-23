@@ -1,30 +1,40 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{% block title %} Beers in Collection {% endblock %}</h1>
-<table class="table table-hover">
-    <thead>
-    <tr>
-        <th scope="col">Bier</th>
-        <th scope="col">Botteldatum</th>
-        <th scope="col">Aankoopdatum</th>
-        <th scope="col">THT</th>
-        <th scope="col">Aantal</th>
-        <th scope="col">Prijs inkoop</th>
-    </tr>
-    </thead>
-    <tbody>
-        {% for bier in voorraad %}
+    <h1>{% block title %} Beers in Collection {% endblock %}</h1>
+    <table class="table table-hover">
+        <thead>
         <tr>
-            <th scope="row">{{ bier['Bier'] }}</th>
-            <td>{{ bier['Botteldatum']|dash_if_none }}</td>
-            <td>{{ bier['Aankoopdatum']|dash_if_none }}</td>
-            <td>{{ bier['THT']|dash_if_none }}</td>
-            <td>{{ bier['Aantal'] }}</td>
-            <td>{{ bier['Prijs']|cents_to_euros }}</td>
+            <th scope="col">Bier</th>
+            <th scope="col">Botteldatum</th>
+            <th scope="col">Aankoopdatum</th>
+            <th scope="col">THT</th>
+            <th scope="col">Aantal</th>
+            <th scope="col">Prijs inkoop</th>
+            <th scope="col">Actions</th>
         </tr>
+        </thead>
+        <tbody>
+        {% for bier in voorraad %}
+            <tr>
+                <th scope="row">{{ bier['Bier'] }}</th>
+                <td data-toggle="tooltip" data-placement="top" title="{{ bier['Botteldatum']|epoch_to_date("%d-%m-%Y") }}">
+                    {{ bier['Botteldatum']|epoch_to_date }}
+                </td>
+                <td data-toggle="tooltip" data-placement="top" title="{{ bier['Aankoopdatum']|epoch_to_date("%d-%m-%Y") }}">
+                    {{ bier['Aankoopdatum']|epoch_to_date }}
+                </td>
+                <td data-toggle="tooltip" data-placement="top" title="{{ bier['THT']|epoch_to_date("%d-%m-%Y") }}">
+                    {{ bier['THT']|epoch_to_date }}
+                </td>
+                <td>{{ bier['Aantal'] }}</td>
+                <td>{{ bier['Prijs']|cents_to_euros }}</td>
+                <td>
+                    <a type="button" class="btn btn-primary" href="#">Edit</a>
+                </td>
+            </tr>
         {% endfor %}
-    </tbody>
-</table>
+        </tbody>
+    </table>
 
 {% endblock %}
