@@ -30,7 +30,9 @@
                 <td>{{ bier['Aantal'] }}</td>
                 <td>{{ bier['Prijs']|cents_to_euros }}</td>
                 <td>
-                    <a type="button" class="btn btn-primary" href="#">Edit</a>
+                    <a type="button" href="{{ url_for('edit_stock_beer', id=bier['ID']) }}">
+                        <span class="badge bg-warning">Edit</span>
+                    </a>
                 </td>
             </tr>
         {% endfor %}

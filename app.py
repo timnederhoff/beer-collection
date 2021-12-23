@@ -23,11 +23,18 @@ def get_library_beer(library_id):
 
 def get_stock_beer(stock_id):
     conn = get_db_connection()
-    stock_beer = conn.execute('SELECT * FROM voorraad WHERE id = ?', stock_id).fetchone()
+    stock_beer = conn.execute('SELECT * FROM voorraad WHERE id = ?', (stock_id,)).fetchone()
     conn.close()
     if stock_beer is None:
         abort(404)
     return stock_beer
+
+
+def get_library():
+    conn = get_db_connection()
+    library = conn.execute('SELECT * FROM bieren ORDER BY brouwerij, naam').fetchall()
+    conn.close()
+    return library
 
 
 @app.route('/')
@@ -49,10 +56,7 @@ def index():
 
 @app.route('/bieren')
 def bieren():
-    conn = get_db_connection()
-    bieren = conn.execute('SELECT * FROM bieren ORDER BY brouwerij, naam').fetchall()
-    conn.close()
-    return render_template('bieren.html', bieren=bieren)
+    return render_template('bieren.html', bieren=get_library())
 
 
 @app.route('/library-beer/<int:id>/edit', methods=('GET', 'POST'))
@@ -77,6 +81,29 @@ def edit_library_beer(id):
     return render_template('edit-library-beer.html', beer=library_beer)
 
 
+@app.route('/stock-beer/<int:id>/edit', methods=('GET', 'POST'))
+def edit_stock_beer(id):
+    stock_beer = get_stock_beer(id)
+    library = get_library()
+
+    if request.method == 'POST':
+        beer_id = request.form['beer']
+        quantity = request.form['quantity']
+
+        if not (beer_id or quantity):
+            flash('Beer and quantity are required!')
+        else:
+            conn = get_db_connection()
+            conn.execute('UPDATE voorraad SET bier = ?, aantal = ?'
+                         ' WHERE id = ?',
+                         (beer_id, quantity, id))
+            conn.commit()
+            conn.close()
+            return redirect(url_for('index'))
+
+    return render_template('edit-stock-beer.html', beer=stock_beer, library=library)
+
+
 @app.template_filter()
 def epoch_to_date(value, formatstr="%Y"):
     if isinstance(value, int):
@@ -95,3 +122,8 @@ def cents_to_euros(value):
 @app.template_filter()
 def dash_if_none(value):
     return value or '-'
+
+
+@app.template_filter()
+def get_name_of(library, beer):
+    return [item for item in library if item['id'] == beer][0]['naam']
