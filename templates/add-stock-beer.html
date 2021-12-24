@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Edit "{{ library|get_name_of(beer['bier']) }}" {% endblock %}</h1>
+    <h1>{% block title %} Add a Beer to Stock" {% endblock %}</h1>
 
     <form method="post">
         <div class="form-group">
             <label for="beer">Beer</label>
             <select id="beer-select" class="form-select" name="beer">
                 {% for library_beer in library %}
-                    <option {{ 'selected' if library_beer.id == beer['bier'] }} value="{{ library_beer.id }}">{{ library_beer.naam }}</option>
+                    <option value="{{ library_beer.id }}">{{ library_beer.naam }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -29,8 +29,7 @@
             <label for="quantity">Quantity</label>
             <input type="number"
                    name="quantity"
-                   class="form-control"
-                   value="{{ beer['aantal'] }}">
+                   class="form-control">
             </input>
         </div>
         <div class="form-group">

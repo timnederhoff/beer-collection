@@ -81,6 +81,16 @@ def edit_library_beer(id):
     return render_template('edit-library-beer.html', beer=library_beer)
 
 
+@app.route('/library-beer/<int:id>/delete', methods=('POST',))
+def delete_library_beer(id):
+    conn = get_db_connection()
+    conn.execute('DELETE FROM bieren WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+    flash('Beer successfully deleted!')
+    return redirect(url_for('bieren'))
+
+
 @app.route('/stock-beer/<int:id>/edit', methods=('GET', 'POST'))
 def edit_stock_beer(id):
     stock_beer = get_stock_beer(id)
@@ -102,6 +112,35 @@ def edit_stock_beer(id):
             return redirect(url_for('index'))
 
     return render_template('edit-stock-beer.html', beer=stock_beer, library=library)
+
+
+@app.route('/stock-beer/add', methods=('GET', 'POST'))
+def add_stock_beer():
+    library = get_library()
+
+    if request.method == 'POST':
+        library_beer_id = request.form['beer']
+        quantity = request.form['quantity']
+
+        if not (library_beer_id or quantity):
+            flash('Beer and quantity are required!')
+        else:
+            conn = get_db_connection()
+            conn.execute('INSERT INTO voorraad (bier, aantal) VALUES (?, ?)', (library_beer_id, quantity))
+            conn.commit()
+            conn.close()
+            return redirect(url_for('index'))
+
+    return render_template('add-stock-beer.html', library=library)
+
+
+@app.route('/stock-beer/<int:id>/delete', methods=('POST',))
+def delete_stock_beer(id):
+    conn = get_db_connection()
+    conn.execute('DELETE FROM voorraad WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('index'))
 
 
 @app.template_filter()
