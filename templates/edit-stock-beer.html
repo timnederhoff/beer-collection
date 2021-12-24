@@ -6,12 +6,24 @@
     <form method="post">
         <div class="form-group">
             <label for="beer">Beer</label>
-            <select class="form-select" name="beer">
+            <select id="beer-select" class="form-select" name="beer">
                 {% for library_beer in library %}
                     <option {{ 'selected' if library_beer.id == beer['bier'] }} value="{{ library_beer.id }}">{{ library_beer.naam }}</option>
                 {% endfor %}
             </select>
         </div>
+        <div id="selected-beer-info">
+
+        </div>
+
+        {% for library_beer in library %}
+            <div hidden id="beer-id-{{ library_beer.id }}">
+                <dl class="row">
+                    <dd class="col-sm-3">brewery:</dd>
+                    <dt class="col-sm-9">{{ library_beer.brouwerij }}</dt>
+                </dl>
+            </div>
+        {% endfor %}
 
         <div class="form-group">
             <label for="quantity">Quantity</label>
