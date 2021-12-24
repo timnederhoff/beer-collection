@@ -20,21 +20,21 @@
         <tbody>
         {% for bier in voorraad %}
             <tr>
-                <th scope="row">{{ bier['Bier'] }}</th>
-                <td data-toggle="tooltip" data-placement="top" title="{{ bier['Botteldatum']|epoch_to_date("%d-%m-%Y") }}">
-                    {{ bier['Botteldatum']|epoch_to_date }}
+                <th scope="row">{{ bier['naam'] }}</th>
+                <td data-toggle="tooltip" data-placement="top" title="{{ bier['bottelDatum']|epoch_to_date("%d-%m-%Y") }}">
+                    {{ bier['bottelDatum']|epoch_to_date }}
                 </td>
-                <td data-toggle="tooltip" data-placement="top" title="{{ bier['Aankoopdatum']|epoch_to_date("%d-%m-%Y") }}">
-                    {{ bier['Aankoopdatum']|epoch_to_date }}
+                <td data-toggle="tooltip" data-placement="top" title="{{ bier['aankopDatum']|epoch_to_date("%d-%m-%Y") }}">
+                    {{ bier['aankopDatum']|epoch_to_date }}
                 </td>
-                <td data-toggle="tooltip" data-placement="top" title="{{ bier['THT']|epoch_to_date("%d-%m-%Y") }}">
-                    {{ bier['THT']|epoch_to_date }}
+                <td data-toggle="tooltip" data-placement="top" title="{{ bier['tenMinsteHoudbaarTot']|epoch_to_date("%d-%m-%Y") }}">
+                    {{ bier['tenMinsteHoudbaarTot']|epoch_to_date }}
                 </td>
-                <td>{{ bier['Aantal'] }}</td>
-                <td>{{ bier['Prijs']|cents_to_euros }}</td>
+                <td>{{ bier['aantal'] }}</td>
+                <td>{{ bier['prijsinkoop']|cents_to_euros }}</td>
                 <td>
-                    <form action="{{ url_for('delete_stock_beer', id=bier['ID']) }}" method="POST">
-                        <a type="button" href="{{ url_for('edit_stock_beer', id=bier['ID']) }}">
+                    <form action="{{ url_for('delete_stock_beer', id=bier['id']) }}" method="POST">
+                        <a type="button" href="{{ url_for('edit_stock_beer', id=bier['id']) }}">
                             <span class="btn btn-warning btn-sm">Edit</span>
                         </a>
                         <input type="submit" value="Delete"

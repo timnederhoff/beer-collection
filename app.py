@@ -40,13 +40,13 @@ def get_library():
 @app.route('/')
 def index():
     conn = get_db_connection()
-    voorraad = conn.execute('SELECT voorraad.id AS ID, '
-                            'bieren.naam AS Bier, '
-                            'voorraad.bottelDatum AS Botteldatum, '
-                            'voorraad.aankoopDatum AS Aankoopdatum, '
-                            'voorraad.tenMinsteHoudbaarTot AS THT, '
-                            'voorraad.aantal AS Aantal, '
-                            'voorraad.prijsinkoop*0.01 AS Prijs '
+    voorraad = conn.execute('SELECT voorraad.id, '
+                            'bieren.naam, '
+                            'voorraad.bottelDatum, '
+                            'voorraad.aankoopDatum, '
+                            'voorraad.tenMinsteHoudbaarTot, '
+                            'voorraad.aantal, '
+                            'voorraad.prijsinkoop*0.01 '
                             'FROM bieren, voorraad '
                             'WHERE voorraad.bier = bieren.id '
                             'ORDER BY bieren.naam, voorraad.bottelDatum').fetchall()
@@ -105,14 +105,20 @@ def edit_stock_beer(id):
     if request.method == 'POST':
         beer_id = request.form['beer']
         quantity = request.form['quantity']
+        bottledate = request.form['bottledate']
+        purchasedate = request.form['purchasedate']
+        bestbeforedate = request.form['bestbeforedate']
+        purchaseprice = request.form['purchaseprice']
 
         if not (beer_id or quantity):
             flash('Beer and quantity are required!')
         else:
             conn = get_db_connection()
-            conn.execute('UPDATE voorraad SET bier = ?, aantal = ?'
-                         ' WHERE id = ?',
-                         (beer_id, quantity, id))
+            conn.execute('UPDATE voorraad '
+                         'SET (bier, aantal, bottelDatum, aankoopDatum, tenMinsteHoudbaarTot, prijsinkoop) '
+                         '= (?, ?, ?, ?, ?, ?) '
+                         'WHERE id = ?',
+                         (beer_id, quantity, bottledate, purchasedate, bestbeforedate, purchaseprice, id))
             conn.commit()
             conn.close()
             return redirect(url_for('index'))

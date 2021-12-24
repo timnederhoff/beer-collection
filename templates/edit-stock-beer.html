@@ -4,39 +4,56 @@
     <h1>{% block title %} Edit "{{ library|get_name_of(beer['bier']) }}" {% endblock %}</h1>
 
     <form method="post">
-        <div class="form-group">
-            <label for="beer">Beer</label>
-            <select id="beer-select" class="form-select" name="beer">
-                {% for library_beer in library %}
-                    <option {{ 'selected' if library_beer.id == beer['bier'] }} value="{{ library_beer.id }}">{{ library_beer.naam }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div id="selected-beer-info">
-
-        </div>
-
-        {% for library_beer in library %}
-            <div hidden id="beer-id-{{ library_beer.id }}">
-                <dl class="row">
-                    <dd class="col-sm-3">brewery:</dd>
-                    <dt class="col-sm-9">{{ library_beer.brouwerij }}</dt>
-                </dl>
+        <div class="row">
+            <div class="col">
+                <label for="beer">Beer</label>
+                <select id="beer-select" class="form-select" name="beer">
+                    {% for library_beer in library %}
+                        <option {{ 'selected' if library_beer.id == beer['bier'] }} value="{{ library_beer.id }}">{{ library_beer.naam }}</option>
+                    {% endfor %}
+                </select>
             </div>
-        {% endfor %}
+            <div class="col" id="selected-beer-info">
 
-        <div class="form-group">
-            <label for="quantity">Quantity</label>
-            <input type="number"
-                   name="quantity"
-                   class="form-control"
-                   value="{{ beer['aantal'] }}">
-            </input>
+            </div>
+
+            <div class="col">
+                <label for="quantity">Quantity</label>
+                <input type="number"
+                       name="quantity"
+                       class="form-control"
+                       value="{{ beer['aantal'] }}">
+            </div>
+
         </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Submit</button>
+
+        <div class="row">
+            <div class="col">
+                <label for="bottledate">Bottle Date</label>
+                <input type="text"
+                       name="bottledate"
+                       placeholder="mm/dd/yyyy"
+                       class="form-control"
+                       value="{{ request.form['bottledate'] or beer['bottelDatum'] }}">
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
         </div>
     </form>
-    <hr>
+
+    {% for library_beer in library %}
+        <div hidden id="beer-id-{{ library_beer.id }}">
+            <dl>
+                <dd class="col-sm-3">brewery:</dd>
+                <dt class="col-sm-9">{{ library_beer.brouwerij }}</dt>
+            </dl>
+        </div>
+    {% endfor %}
+
     <script src="{{url_for('static', filename='js/beer-selectors.js')}}"></script>
 {% endblock %}
