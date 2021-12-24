@@ -4,25 +4,68 @@
     <h1>{% block title %} Edit "{{ beer['naam'] }}" {% endblock %}</h1>
 
     <form method="post">
-        <div class="form-group">
+    <div class="row">
+        <div class="col">
             <label for="name">Name</label>
             <input type="text"
                    name="name"
                    placeholder="Beer name"
                    class="form-control"
                    value="{{ request.form['name'] or beer['naam'] }}">
-            </input>
         </div>
 
-        <div class="form-group">
+        <div class="col">
             <label for="brewery">Brewery</label>
             <input type="text"
                    name="brewery"
                    placeholder="Brewery"
                    class="form-control"
                    value="{{ request.form['brewery'] or beer['brouwerij'] }}">
-            </input>
         </div>
+
+        <div class="col">
+            <label for="category">Category</label>
+            <input type="text"
+                   name="category"
+                   placeholder="category"
+                   class="form-control"
+                   value="{{ request.form['category'] or beer['soort'] }}">
+        </div>
+    </div>
+
+        <div class="row">
+            <div class="col">
+                <label for="bottleyear">Bottle date present?</label>
+                <input type="text"
+                       name="bottleyear"
+                       class="form-control"
+                       value="{{ request.form['bottleyear'] or beer['plekOpflesBotteljaar'] }}">
+            </div>
+
+            <div class="col">
+                <label for="yearstomature">Years to Mature</label>
+                <input type="number"
+                       min="0"
+                       step="1"
+                       name="yearstomature"
+                       class="form-control"
+                       value="{{ request.form['yearstomature'] or beer['aantalJarenRijpen'] }}">
+            </div>
+
+            <div class="col">
+                <label for="yearstobestbefore">Years to BBD</label>
+                <input type="number"
+                       min="0"
+                       step="1"
+                       name="yearstobestbefore"
+                       class="form-control"
+                       value="{{ request.form['yearstobestbefore'] or beer['aantalJarenTotTHT'] }}">
+            </div>
+        </div>
+
+
+
+
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>

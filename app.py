@@ -66,14 +66,20 @@ def edit_library_beer(id):
     if request.method == 'POST':
         brewery = request.form['brewery']
         name = request.form['name']
+        category = request.form['category']
+        bottleyear = request.form['bottleyear']
+        yearstomature = request.form['yearstomature']
+        yearstobestbefore = request.form['yearstobestbefore']
 
         if not (brewery or name):
             flash('Brewery and Name are required!')
         else:
             conn = get_db_connection()
-            conn.execute('UPDATE bieren SET brouwerij = ?, naam = ?'
-                         ' WHERE id = ?',
-                         (brewery, name, id))
+            conn.execute('UPDATE bieren '
+                         'SET (brouwerij, naam, soort, plekOpflesBotteljaar, aantalJarenRijpen, aantalJarenTotTHT) '
+                         '= (?, ?, ?, ?, ?, ?) '
+                         'WHERE id = ?',
+                         (brewery, name, category, bottleyear, yearstomature, yearstobestbefore, id))
             conn.commit()
             conn.close()
             return redirect(url_for('bieren'))
