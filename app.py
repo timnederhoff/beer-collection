@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 
 def get_db_connection():
-    conn = sqlite3.connect('bieren.db')
+    conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -46,7 +46,7 @@ def index():
                             'voorraad.aankoopDatum, '
                             'voorraad.tenMinsteHoudbaarTot, '
                             'voorraad.aantal, '
-                            'voorraad.prijsinkoop*0.01 '
+                            'voorraad.prijsInkoop*0.01 AS prijsInkoop '
                             'FROM bieren, voorraad '
                             'WHERE voorraad.bier = bieren.id '
                             'ORDER BY bieren.naam, voorraad.bottelDatum').fetchall()

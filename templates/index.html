@@ -21,17 +21,17 @@
         {% for bier in voorraad %}
             <tr>
                 <th scope="row">{{ bier['naam'] }}</th>
-                <td data-toggle="tooltip" data-placement="top" title="{{ bier['bottelDatum']|epoch_to_date("%d-%m-%Y") }}">
+                <td data-toggle="tooltip" data-placement="top" title="{{ bier['bottelDatum']|epoch_to_date('%d-%m-%Y') }}">
                     {{ bier['bottelDatum']|epoch_to_date }}
                 </td>
-                <td data-toggle="tooltip" data-placement="top" title="{{ bier['aankopDatum']|epoch_to_date("%d-%m-%Y") }}">
-                    {{ bier['aankopDatum']|epoch_to_date }}
+                <td data-toggle="tooltip" data-placement="top" title="{{ bier['aankopDatum']|epoch_to_date('%d-%m-%Y') }}">
+                    {{ bier['aankoopDatum']|epoch_to_date }}
                 </td>
-                <td data-toggle="tooltip" data-placement="top" title="{{ bier['tenMinsteHoudbaarTot']|epoch_to_date("%d-%m-%Y") }}">
+                <td data-toggle="tooltip" data-placement="top" title="{{ bier['tenMinsteHoudbaarTot']|epoch_to_date('%d-%m-%Y') }}">
                     {{ bier['tenMinsteHoudbaarTot']|epoch_to_date }}
                 </td>
                 <td>{{ bier['aantal'] }}</td>
-                <td>{{ bier['prijsinkoop']|cents_to_euros }}</td>
+                <td>{{ bier['prijsInkoop']|cents_to_euros }}</td>
                 <td>
                     <form action="{{ url_for('delete_stock_beer', id=bier['id']) }}" method="POST">
                         <a type="button" href="{{ url_for('edit_stock_beer', id=bier['id']) }}">

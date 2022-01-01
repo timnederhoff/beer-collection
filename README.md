@@ -13,6 +13,7 @@ Activate Virtual Environment:
 ## Run
 From the root of this project:
 ```shell
+export FLASK_ENV=development
 flask run
 ```
 
@@ -23,4 +24,3 @@ queries:
 * hoeveel bieren op voorraad per jaartal
 * aantal jaar tot verkoopdatum per (bier+jaar)
 * welke bieren moeten dit jaar verkocht worden?
-
