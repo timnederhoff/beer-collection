@@ -1,4 +1,5 @@
 import sqlite3
+import pytz
 from flask import Flask, render_template, request, url_for, flash, redirect
 from datetime import datetime
 from werkzeug.exceptions import abort
@@ -23,7 +24,18 @@ def get_library_beer(library_id):
 
 def get_stock_beer(stock_id):
     conn = get_db_connection()
-    stock_beer = conn.execute('SELECT id, bier, bottelDatum, aankoopDatum, tenMinsteHoudbaarTot, aantal, prijsInkoop*0.01 AS prijsInkoop, flesnummer, doel, opmerking FROM voorraad WHERE id = ?', (stock_id,)).fetchone()
+    stock_beer = conn.execute('SELECT id, '
+                              'bier, '
+                              'strftime("%Y-%m-%d", bottelDatum, "unixepoch") as bottelDatum, '
+                              'strftime("%Y-%m-%d", aankoopDatum, "unixepoch") as aankoopDatum, '
+                              'strftime("%Y-%m-%d", tenMinsteHoudbaarTot, "unixepoch") as tenMinsteHoudbaarTot, '
+                              'aantal, '
+                              'prijsInkoop*0.01 AS prijsInkoop, '
+                              'flesnummer, '
+                              'doel, '
+                              'opmerking '
+                              'FROM voorraad '
+                              'WHERE id = ?', (stock_id,)).fetchone()
     conn.close()
     if stock_beer is None:
         abort(404)
@@ -102,13 +114,22 @@ def edit_stock_beer(id):
     stock_beer = get_stock_beer(id)
     library = get_library()
 
+    def totimestamp(date):
+        try:
+            dt = datetime.strptime(date, '%Y-%m-%d')
+            return int(pytz.utc.localize(dt).timestamp())
+        except:
+            print('failed to parse date: ', date)
+            return ''
+
     if request.method == 'POST':
         beer_id = request.form['beer']
         quantity = request.form['quantity']
-        bottledate = request.form['bottledate']
-        purchasedate = request.form['purchasedate']
-        bestbeforedate = request.form['bestbeforedate']
-        purchaseprice = request.form['purchaseprice']
+        bottledate = totimestamp(request.form['bottledate'])
+        purchasedate = totimestamp(request.form['purchasedate'])
+        bestbeforedate = totimestamp(request.form['bestbeforedate'])
+        purchaseprice = str(int(float(request.form['purchaseprice']) * 100))
+        print('price ', purchaseprice)
         bottlenumber = request.form['bottlenumber']
         purpose = request.form['purpose']
         comments = request.form['comments']
@@ -121,7 +142,8 @@ def edit_stock_beer(id):
                          'SET (bier, aantal, bottelDatum, aankoopDatum, tenMinsteHoudbaarTot, prijsinkoop, flesnummer, doel, opmerking) '
                          '= (?, ?, ?, ?, ?, ?, ?, ?, ?) '
                          'WHERE id = ?',
-                         (beer_id, quantity, bottledate, purchasedate, bestbeforedate, purchaseprice, bottlenumber, purpose, comments, id))
+                         (beer_id, quantity, bottledate, purchasedate, bestbeforedate, purchaseprice, bottlenumber,
+                          purpose, comments, id))
             conn.commit()
             conn.close()
             return redirect(url_for('index'))
@@ -166,7 +188,7 @@ def epoch_to_date(value, formatstr="%Y"):
 
 
 @app.template_filter()
-def cents_to_euros(value):
+def to_euro_comma_delimited(value):
     if value:
         return "€ {:.2f}".format(value).replace('.', ',')
     else:
@@ -174,7 +196,7 @@ def cents_to_euros(value):
 
 
 @app.template_filter()
-def cents_to_euros2(value):
+def value_or_empty(value):
     if value:
         return "{:.2f}".format(value)
     else:
