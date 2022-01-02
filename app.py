@@ -23,7 +23,7 @@ def get_library_beer(library_id):
 
 def get_stock_beer(stock_id):
     conn = get_db_connection()
-    stock_beer = conn.execute('SELECT * FROM voorraad WHERE id = ?', (stock_id,)).fetchone()
+    stock_beer = conn.execute('SELECT id, bier, bottelDatum, aankoopDatum, tenMinsteHoudbaarTot, aantal, prijsInkoop*0.01 AS prijsInkoop, flesnummer, doel, opmerking FROM voorraad WHERE id = ?', (stock_id,)).fetchone()
     conn.close()
     if stock_beer is None:
         abort(404)
@@ -109,16 +109,19 @@ def edit_stock_beer(id):
         purchasedate = request.form['purchasedate']
         bestbeforedate = request.form['bestbeforedate']
         purchaseprice = request.form['purchaseprice']
+        bottlenumber = request.form['bottlenumber']
+        purpose = request.form['purpose']
+        comments = request.form['comments']
 
         if not (beer_id or quantity):
             flash('Beer and quantity are required!')
         else:
             conn = get_db_connection()
             conn.execute('UPDATE voorraad '
-                         'SET (bier, aantal, bottelDatum, aankoopDatum, tenMinsteHoudbaarTot, prijsinkoop) '
-                         '= (?, ?, ?, ?, ?, ?) '
+                         'SET (bier, aantal, bottelDatum, aankoopDatum, tenMinsteHoudbaarTot, prijsinkoop, flesnummer, doel, opmerking) '
+                         '= (?, ?, ?, ?, ?, ?, ?, ?, ?) '
                          'WHERE id = ?',
-                         (beer_id, quantity, bottledate, purchasedate, bestbeforedate, purchaseprice, id))
+                         (beer_id, quantity, bottledate, purchasedate, bestbeforedate, purchaseprice, bottlenumber, purpose, comments, id))
             conn.commit()
             conn.close()
             return redirect(url_for('index'))
@@ -168,6 +171,14 @@ def cents_to_euros(value):
         return "€ {:.2f}".format(value).replace('.', ',')
     else:
         return '-'
+
+
+@app.template_filter()
+def cents_to_euros2(value):
+    if value:
+        return "{:.2f}".format(value)
+    else:
+        return ''
 
 
 @app.template_filter()
