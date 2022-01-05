@@ -5,24 +5,24 @@
 <table class="table table-hover">
     <thead>
     <tr>
-        <th scope="col">Brouwerij</th>
-        <th scope="col">Naam</th>
-        <th scope="col">Soort</th>
-        <th scope="col">Botteljaar aanwezig</th>
-        <th scope="col">Aantal jaren rijpen</th>
-        <th scope="col">Aantal jaren tot THT</th>
+        <th scope="col">Brewery</th>
+        <th scope="col">Name</th>
+        <th scope="col">Category</th>
+        <th scope="col">Bottle Date Present?</th>
+        <th scope="col">Number of Years to Mature</th>
+        <th scope="col">Number of Years to Best Before Date</th>
         <th scope="col">Actions</th>
     </tr>
     </thead>
     <tbody>
     {% for bier in bieren %}
     <tr>
-        <th scope="row">{{ bier['brouwerij'] }}</th>
-        <td>{{ bier['naam'] }}</td>
-        <td>{{ bier['soort'] }}</td>
-        <td>{{ bier['plekOpflesBotteljaar']|dash_if_none }}</td>
-        <td>{{ bier['aantalJarenRijpen']|dash_if_none }}</td>
-        <td>{{ bier['aantalJarenTotTHT']|dash_if_none }}</td>
+        <th scope="row">{{ bier['brewery'] }}</th>
+        <td>{{ bier['name'] }}</td>
+        <td>{{ bier['category'] }}</td>
+        <td>{{ bier['bottle_date_location']|dash_if_none }}</td>
+        <td>{{ bier['years_to_mature']|dash_if_none }}</td>
+        <td>{{ bier['years_to_bestbefore']|dash_if_none }}</td>
         <td>
             <a type="button" href="{{ url_for('edit_library_beer', id=bier['id']) }}">
                 <span class="badge bg-warning">Edit</span>
