@@ -37,3 +37,8 @@ def value_or_empty(value):
 @app.template_filter()
 def dash_if_none(value):
     return value or '-'
+
+
+@app.template_filter()
+def year_only(date):
+    return date.strftime("%Y")

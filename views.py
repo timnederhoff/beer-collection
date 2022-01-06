@@ -1,3 +1,6 @@
+from datetime import datetime
+
+import pytz
 from flask import render_template, request, redirect, url_for, flash
 from models import LibraryBeer, StockBeer
 from app import app, db
@@ -53,7 +56,7 @@ def edit_stock_beer(id):
     def totimestamp(date):
         try:
             dt = datetime.strptime(date, '%Y-%m-%d')
-            return int(pytz.utc.localize(dt).timestamp())
+            return pytz.utc.localize(dt)
         except:
             print('failed to parse date: ', date)
             return ''
@@ -63,13 +66,22 @@ def edit_stock_beer(id):
         best_before_date = totimestamp(request.form['bestbeforedate'])
         bottle_date = totimestamp(request.form['bottledate'])
         purchase_date = totimestamp(request.form['purchasedate'])
-        purchase_price = str(int(float(request.form['purchaseprice']) * 100))
+        purchase_price = request.form['purchaseprice']
         bottle_number = request.form['bottlenumber']
         quantity = request.form['quantity']
         purpose = request.form['purpose']
         comments = request.form['comments']
 
-        beer = StockBeer(id, librarybeer_id, best_before_date, bottle_date, purchase_date, purchase_price, bottle_number, quantity, purpose, comments)
+        beer = StockBeer(id=id,
+                         librarybeer_id=librarybeer_id,
+                         best_before_date=best_before_date,
+                         bottle_date=bottle_date,
+                         purchase_date=purchase_date,
+                         purchase_price=purchase_price,
+                         bottle_number=bottle_number,
+                         quantity=quantity,
+                         purpose=purpose,
+                         comments=comments)
         db.session.add(beer)
         db.session.commit()
 

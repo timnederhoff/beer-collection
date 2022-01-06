@@ -22,13 +22,13 @@
             <tr>
                 <th scope="row">{{ bier['librarybeer'].name }}</th>
                 <td data-toggle="tooltip" data-placement="top" title="{{ bier['bottle_date'] }}">
-                    {{ bier['bottle_date'] }}
+                    {{ bier['bottle_date']|year_only }}
                 </td>
                 <td data-toggle="tooltip" data-placement="top" title="{{ bier['purchase_date'] }}">
-                    {{ bier['purchase_date'] }}
+                    {{ bier['purchase_date']|year_only }}
                 </td>
                 <td data-toggle="tooltip" data-placement="top" title="{{ bier['best_before_date'] }}">
-                    {{ bier['best_before_date'] }}
+                    {{ bier['best_before_date']|year_only }}
                 </td>
                 <td>{{ bier['quantity'] }}</td>
                 <td>{{ bier['purchase_price']|to_euro_comma_delimited }}</td>
