@@ -41,7 +41,8 @@ def edit_library_beer(id):
 
 @app.route('/library-beer/<int:id>/delete', methods=('POST',))
 def delete_library_beer(id):
-    LibraryBeer.query().filter_by(id=id).delete()
+    beer = LibraryBeer.query.get(id)
+    db.session.delete(beer)
     db.session.commit()
 
     flash('Beer successfully deleted!')
@@ -84,7 +85,8 @@ def edit_stock_beer(id):
 
 @app.route('/stock-beer/<int:id>/delete', methods=('POST',))
 def delete_stock_beer(id):
-    StockBeer.filter_by(id=id).delete()
+    beer = StockBeer.query.get(id)
+    db.session.delete(beer)
     db.session.commit()
     flash('Beer successfully deleted!')
     return redirect(url_for('index'))

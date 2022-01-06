@@ -11,6 +11,7 @@ if __name__ == "__main__":
 
     from views import *
 
+    app.secret_key = 'very secret!'
     app.run(debug=True)
 
 # Set up the SQLAlchemy Database to be a local file 'desserts.db'
