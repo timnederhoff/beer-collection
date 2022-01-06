@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Edit "{{ library|get_name_of(beer['bier']) }}" {% endblock %}</h1>
+    <h1>{% block title %} Edit "{{ beer['librarybeer'].name }}" {% endblock %}</h1>
 
     <form method="post">
         <div class="row">
@@ -11,7 +11,7 @@
                 <label for="beer">Beer</label>
                 <select id="beer-select" class="form-select" name="beer">
                     {% for library_beer in library %}
-                        <option {{ 'selected' if library_beer.id == beer['bier'] }} value="{{ library_beer.id }}">{{ library_beer.naam }}</option>
+                        <option {{ 'selected' if library_beer.id == beer['librarybeer_id'] }} value="{{ library_beer.id }}">{{ library_beer.name }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -21,7 +21,7 @@
                 <input type="number"
                        name="quantity"
                        class="form-control"
-                       value="{{ beer['aantal'] }}">
+                       value="{{ beer['quantity'] }}">
             </div>
 
         </div>
@@ -33,7 +33,7 @@
                 <input type="date"
                     name="purchasedate"
                     class="form-control"
-                    value="{{ beer['aankoopDatum'] }}"
+                    value="{{ beer['purchase_date'] }}"
                     min="1983-01-01">
             </div>
             
@@ -42,7 +42,7 @@
                 <input type="date"
                        name="bottledate"
                        class="form-control"
-                       value="{{ beer['bottelDatum'] }}"
+                       value="{{ beer['bottle_date'] }}"
                        min="1983-01-01">
             </div>
 
@@ -51,7 +51,7 @@
                 <input type="date"
                        name="bestbeforedate"
                        class="form-control"
-                       value="{{ beer['tenMinsteHoudbaarTot'] }}"
+                       value="{{ beer['best_before_date'] }}"
                        min="1983-01-01">
             </div>
         </div>
@@ -66,7 +66,7 @@
                        min="0.00"
                        step="0.01"
                        class="form-control"
-                       value="{{ beer['prijsInkoop']|value_or_empty }}">
+                       value="{{ beer['purchase_price']|value_or_empty }}">
                 </div>
             </div>
 
@@ -75,7 +75,7 @@
                 <input type="text"
                        name="bottlenumber"
                        class="form-control"
-                       value="{{ beer['flesnummer'] }}">
+                       value="{{ beer['bottle_number'] }}">
             </div>
 
             <div class="col">
@@ -83,7 +83,7 @@
                 <input type="text"
                        name="purpose"
                        class="form-control"
-                       value="{{ beer['doel'] }}">
+                       value="{{ beer['purpose'] }}">
             </div>
         </div>
 
@@ -92,7 +92,7 @@
             <input type="text"
                    name="comments"
                    class="form-control"
-                   value="{{ beer['opmerking'] }}">
+                   value="{{ beer['comments'] }}">
         </div>
         <br>
 
@@ -108,7 +108,7 @@
         <div hidden id="beer-id-{{ library_beer.id }}">
             <dl>
                 <dd class="col-sm-3">brewery:</dd>
-                <dt class="col-sm-9">{{ library_beer.brouwerij }}</dt>
+                <dt class="col-sm-9">{{ library_beer.brewery }}</dt>
             </dl>
         </div>
     {% endfor %}
