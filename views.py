@@ -50,7 +50,7 @@ def delete_library_beer(id):
 
 @app.route('/stock-beer/<int:id>/edit', methods=('GET', 'POST'))
 def edit_stock_beer(id):
-    stock_beer = StockBeer.query.get(id)
+    stock_beer = StockBeer.query.get(id) or StockBeer()
     library = LibraryBeer.query.all()
 
     def totimestamp(date):
@@ -60,29 +60,22 @@ def edit_stock_beer(id):
         except:
             print('failed to parse date: ', date)
             return ''
+        
 
     if request.method == 'POST':
-        librarybeer_id = request.form['beer']
-        best_before_date = totimestamp(request.form['bestbeforedate'])
-        bottle_date = totimestamp(request.form['bottledate'])
-        purchase_date = totimestamp(request.form['purchasedate'])
-        purchase_price = request.form['purchaseprice']
-        bottle_number = request.form['bottlenumber']
-        quantity = request.form['quantity']
-        purpose = request.form['purpose']
-        comments = request.form['comments']
 
-        beer = StockBeer(id=id,
-                         librarybeer_id=librarybeer_id,
-                         best_before_date=best_before_date,
-                         bottle_date=bottle_date,
-                         purchase_date=purchase_date,
-                         purchase_price=purchase_price,
-                         bottle_number=bottle_number,
-                         quantity=quantity,
-                         purpose=purpose,
-                         comments=comments)
-        db.session.add(beer)
+        if not stock_beer.id:
+            db.session.add(stock_beer)
+            
+        stock_beer.librarybeer_id = request.form['beer']
+        stock_beer.best_before_date = totimestamp(request.form['bestbeforedate'])
+        stock_beer.bottle_date = totimestamp(request.form['bottledate'])
+        stock_beer.purchase_date = totimestamp(request.form['purchasedate'])
+        stock_beer.purchase_price = request.form['purchaseprice']
+        stock_beer.bottle_number = request.form['bottlenumber']
+        stock_beer.quantity = request.form['quantity']
+        stock_beer.purpose = request.form['purpose']
+        stock_beer.comments = request.form['comments']
         db.session.commit()
 
         return redirect(url_for('index'))

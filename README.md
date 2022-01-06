@@ -2,11 +2,10 @@
 
 install requirements:
 ```shell
-./setup.sh
-```
-
-Activate Virtual Environment:
-```shell
+VENV_DIR="venv"
+rm -rf $VENV_DIR
+python3 -m venv $VENV_DIR
+pip3 install -r requirements.txt
 . venv/bin/activate
 ```
 
@@ -14,7 +13,7 @@ Activate Virtual Environment:
 From the root of this project:
 ```shell
 export FLASK_ENV=development
-flask run
+python3 app.py
 ```
 
 ## TODO

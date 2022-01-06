@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Edit "{{ beer['librarybeer'].name }}" {% endblock %}</h1>
+    <h1>{% block title %} 
+        {% if beer.id %}
+            Edit "{{ beer['librarybeer'].name }}"
+        {% else %}
+            Add new Stock Beer
+        {% endif %}
+        {% endblock %}
+    </h1>
 
     <form method="post">
         <div class="row">
