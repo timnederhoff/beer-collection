@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Edit "{{ beer['name'] }}" {% endblock %}</h1>
-
+    <h1>{% block title %} 
+        {% if beer.id %}
+            Edit "{{ beer.name }}"
+        {% else %}
+            Add new Library Beer
+        {% endif %}
+        {% endblock %}
+    </h1>
     <form method="post">
     <div class="row">
         <div class="col">

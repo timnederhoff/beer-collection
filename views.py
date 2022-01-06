@@ -20,20 +20,20 @@ def bieren():
 
 @app.route('/library-beer/<int:id>/edit', methods=('GET', 'POST'))
 def edit_library_beer(id):
-    library_beer = LibraryBeer.query.get(id)
+    library_beer = LibraryBeer.query.get(id) or LibraryBeer()
 
     if request.method == 'POST':
-        brewery = request.form['brewery']
-        name = request.form['name']
-        category = request.form['category']
-        bottle_date_location = request.form['bottleyear']
-        years_to_mature = request.form['yearstomature']
-        years_to_bestbefore = request.form['yearstobestbefore']
+        if not library_beer.id:
+            db.session.add(library_beer)
 
-        beer = LibraryBeer(id, brewery, name, category, bottle_date_location, years_to_mature, years_to_bestbefore)
-
-        db.session.add(beer)
+        library_beer.brewery = request.form['brewery']
+        library_beer.name = request.form['name']
+        library_beer.category = request.form['category']
+        library_beer.bottle_date_location = request.form['bottleyear']
+        library_beer.years_to_mature = request.form['yearstomature']
+        library_beer.years_to_bestbefore = request.form['yearstobestbefore']
         db.session.commit()
+
         return redirect(url_for('bieren'))
 
     return render_template('edit-library-beer.html', beer=library_beer)
@@ -63,7 +63,6 @@ def edit_stock_beer(id):
         
 
     if request.method == 'POST':
-
         if not stock_beer.id:
             db.session.add(stock_beer)
             
