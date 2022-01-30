@@ -1,5 +1,4 @@
 from flask import Flask
-from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -16,6 +15,7 @@ if __name__ == "__main__":
 
 # Set up the SQLAlchemy Database to be a local file 'desserts.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
