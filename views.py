@@ -60,18 +60,18 @@ def edit_stock_beer(id):
             return pytz.utc.localize(dt)
         except:
             print('failed to parse date: ', date)
-            return ''
+            return None
         
 
     if request.method == 'POST':
         if not stock_beer.id:
             db.session.add(stock_beer)
-            
+
         stock_beer.librarybeer_id = request.form['beer']
         stock_beer.best_before_date = totimestamp(request.form['bestbeforedate'])
         stock_beer.bottle_date = totimestamp(request.form['bottledate'])
         stock_beer.purchase_date = totimestamp(request.form['purchasedate'])
-        stock_beer.purchase_price = request.form['purchaseprice']
+        stock_beer.purchase_price = request.form['purchaseprice'] or None
         stock_beer.bottle_number = request.form['bottlenumber']
         stock_beer.quantity = request.form['quantity']
         stock_beer.purpose = request.form['purpose']

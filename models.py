@@ -18,14 +18,14 @@ class StockBeer(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     librarybeer_id = db.Column(db.Integer, db.ForeignKey('library_beer.id'), nullable=False)
     librarybeer = db.relationship('LibraryBeer', backref=db.backref('stockbeers', lazy=True))
-    best_before_date = db.Column(db.Date)
-    bottle_date = db.Column(db.Date)
-    purchase_date = db.Column(db.Date)
-    purchase_price = db.Column(db.Float)
-    bottle_number = db.Column(db.String(200))
+    best_before_date = db.Column(db.Date, nullable=True)
+    bottle_date = db.Column(db.Date, nullable=True)
+    purchase_date = db.Column(db.Date, nullable=True)
+    purchase_price = db.Column(db.Float, nullable=True)
+    bottle_number = db.Column(db.String(200), nullable=True)
     quantity = db.Column(db.Integer)
-    purpose = db.Column(db.String(200))
-    comments = db.Column(db.String(200))
+    purpose = db.Column(db.String(200), nullable=True)
+    comments = db.Column(db.String(200), nullable=True)
 
     def __repr__(self):
         return '<Stock Beer %r>' % self.librarybeer

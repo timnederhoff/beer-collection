@@ -42,4 +42,7 @@ def dash_if_none(value):
 
 @app.template_filter()
 def year_only(date):
-    return date.strftime("%Y")
+    if date:
+        return date.strftime("%Y")
+    else:
+        return ''
