@@ -61,7 +61,6 @@ def edit_stock_beer(id):
         except:
             print('failed to parse date: ', date)
             return None
-        
 
     if request.method == 'POST':
         if not stock_beer.id:

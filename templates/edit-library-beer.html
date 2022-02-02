@@ -17,7 +17,7 @@
                    name="name"
                    placeholder="Beer name"
                    class="form-control"
-                   value="{{ request.form['name'] or beer['name'] }}">
+                   value="{{ request.form['name'] or beer['name']  or '' }}">
         </div>
 
         <div class="col">
@@ -26,7 +26,7 @@
                    name="brewery"
                    placeholder="Brewery"
                    class="form-control"
-                   value="{{ request.form['brewery'] or beer['brewery'] }}">
+                   value="{{ request.form['brewery'] or beer['brewery']  or '' }}">
         </div>
 
         <div class="col">
@@ -35,7 +35,7 @@
                    name="category"
                    placeholder="category"
                    class="form-control"
-                   value="{{ request.form['category'] or beer['category'] }}">
+                   value="{{ request.form['category'] or beer['category']  or '' }}">
         </div>
     </div>
 
@@ -45,7 +45,7 @@
                 <input type="text"
                        name="bottleyear"
                        class="form-control"
-                       value="{{ request.form['bottleyear'] or beer['bottle_date_location'] }}">
+                       value="{{ request.form['bottleyear'] or beer['bottle_date_location'] or '' }}">
             </div>
 
             <div class="col">
