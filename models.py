@@ -3,12 +3,12 @@ from app import db
 
 class LibraryBeer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    brewery = db.Column(db.String(200))
-    name = db.Column(db.String(200))
-    category = db.Column(db.String(200))
-    bottle_date_location = db.Column(db.String(200))
-    years_to_mature = db.Column(db.Integer)
-    years_to_bestbefore = db.Column(db.Integer)
+    brewery = db.Column(db.String(200), nullable=False)
+    name = db.Column(db.String(200), nullable=False)
+    category = db.Column(db.String(200), nullable=True)
+    bottle_date_location = db.Column(db.String(200), nullable=True)
+    years_to_mature = db.Column(db.Integer, nullable=True)
+    years_to_bestbefore = db.Column(db.Integer, nullable=True)
 
     def __repr__(self):
         return '<Library Beer %r>' % self.name
@@ -23,7 +23,7 @@ class StockBeer(db.Model):
     purchase_date = db.Column(db.Date, nullable=True)
     purchase_price = db.Column(db.Float, nullable=True)
     bottle_number = db.Column(db.String(200), nullable=True)
-    quantity = db.Column(db.Integer)
+    quantity = db.Column(db.Integer, nullable=False)
     purpose = db.Column(db.String(200), nullable=True)
     comments = db.Column(db.String(200), nullable=True)
 

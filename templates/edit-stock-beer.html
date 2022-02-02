@@ -82,7 +82,7 @@
                 <input type="text"
                        name="bottlenumber"
                        class="form-control"
-                       value="{{ beer['bottle_number'] }}">
+                       value="{{ beer['bottle_number'] or '' }}">
             </div>
 
             <div class="col">
@@ -90,7 +90,7 @@
                 <input type="text"
                        name="purpose"
                        class="form-control"
-                       value="{{ beer['purpose'] }}">
+                       value="{{ beer['purpose'] or '' }}">
             </div>
         </div>
 
@@ -99,7 +99,7 @@
             <input type="text"
                    name="comments"
                    class="form-control"
-                   value="{{ beer['comments'] }}">
+                   value="{{ beer['comments'] or '' }}">
         </div>
         <br>
 

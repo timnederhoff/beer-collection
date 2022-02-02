@@ -30,8 +30,8 @@ def edit_library_beer(id):
         library_beer.name = request.form['name']
         library_beer.category = request.form['category']
         library_beer.bottle_date_location = request.form['bottleyear']
-        library_beer.years_to_mature = request.form['yearstomature']
-        library_beer.years_to_bestbefore = request.form['yearstobestbefore']
+        library_beer.years_to_mature = request.form['yearstomature'] or None
+        library_beer.years_to_bestbefore = request.form['yearstobestbefore'] or None
         db.session.commit()
 
         return redirect(url_for('bieren'))
